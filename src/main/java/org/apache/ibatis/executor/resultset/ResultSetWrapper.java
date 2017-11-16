@@ -56,8 +56,11 @@ class ResultSetWrapper {
     final ResultSetMetaData metaData = rs.getMetaData();
     final int columnCount = metaData.getColumnCount();
     for (int i = 1; i <= columnCount; i++) {
+      //getColumnLabel可以获取as之后的列名 getColumnName就是单纯的获取列名。即使存在as 别名也不会起作用
       columnNames.add(configuration.isUseColumnLabel() ? metaData.getColumnLabel(i) : metaData.getColumnName(i));
+      //getColumnType获取列的类型java.sql.Types
       jdbcTypes.add(JdbcType.forCode(metaData.getColumnType(i)));
+      //获取类型的全限定名
       classNames.add(metaData.getColumnClassName(i));
     }
   }

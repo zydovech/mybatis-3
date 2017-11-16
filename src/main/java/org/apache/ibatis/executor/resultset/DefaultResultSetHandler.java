@@ -66,13 +66,16 @@ import java.util.Set;
  * @author Eduardo Macarron
  * @author Iwao AVE!
  * @author Kazuki Shimizu
+ 默认的结果处理类
  */
 public class DefaultResultSetHandler implements ResultSetHandler {
 
   private static final Object DEFERED = new Object();
-
+  //对应的executor
   private final Executor executor;
+  //全局的配置信息
   private final Configuration configuration;
+  //对应于每条语句都会有个对应的MappedStatement存在
   private final MappedStatement mappedStatement;
   private final RowBounds rowBounds;
   private final ParameterHandler parameterHandler;

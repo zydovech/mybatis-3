@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 对应一个sql
  * @author Clinton Begin
  */
 public final class MappedStatement {

@@ -37,18 +37,48 @@ public class ResultMap {
      */
     private String id;
     /**
-     * <resultMap/> 的 type 属性
+     * <resultMap/> 的 type 属性。返回对象的类型
      */
     private Class<?> type;
+    /**
+     * 除 <discriminator/> 以外的其他映射关系
+     */
     private List<ResultMapping> resultMappings;
+    /**
+     * 记录带有 id 属性的映射关系
+     */
     private List<ResultMapping> idResultMappings;
+    /**
+     * 记录带有 constructor 属性的映射关系
+     */
     private List<ResultMapping> constructorResultMappings;
+    /**
+     * 记录带有 property 属性的映射关系
+     */
     private List<ResultMapping> propertyResultMappings;
+    /**
+     * 记录配置中所有的 column 属性集合
+     */
     private Set<String> mappedColumns;
+    /**
+     * 记录配置中所有的 property 属性集合
+     */
     private Set<String> mappedProperties;
+    /**
+     * 对应 <discriminator/> 节点
+     */
     private Discriminator discriminator;
+    /**
+     * 是否包含嵌套的结果映射
+     */
     private boolean hasNestedResultMaps;
+    /**
+     * 是否包含嵌套查询
+     */
     private boolean hasNestedQueries;
+    /**
+     * 是否开启自动映射
+     */
     private Boolean autoMapping;
 
     private ResultMap() {

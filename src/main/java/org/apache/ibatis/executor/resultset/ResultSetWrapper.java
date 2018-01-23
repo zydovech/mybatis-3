@@ -30,20 +30,44 @@ import java.util.*;
  */
 public class ResultSetWrapper {
 
+    /**
+     * mysql返回的结果集
+     */
     private final ResultSet resultSet;
+    /**
+     * 用于注册类型处理器
+     */
     private final TypeHandlerRegistry typeHandlerRegistry;
+    /**
+     * 所有查询出来的列名（即通过select后面的列名）通过ResultSetMetaData获取
+     */
     private final List<String> columnNames = new ArrayList<String>();
+    /**
+     * 所有列对应的class类型 通过ResultSetMetaData获取
+     */
     private final List<String> classNames = new ArrayList<String>();
+    /**
+     * 所有列对应的JdbcType
+     */
     private final List<JdbcType> jdbcTypes = new ArrayList<JdbcType>();
+
     private final Map<String, Map<Class<?>, TypeHandler<?>>> typeHandlerMap = new HashMap<String, Map<Class<?>, TypeHandler<?>>>();
+    /**
+     * 所有被映射的列名 key是 resultMap.getId() + ":" + columnPrefix
+     */
     private final Map<String, List<String>> mappedColumnNamesMap = new HashMap<String, List<String>>();
+    /**
+     * 所有被映射的列名 key是 resultMap.getId() + ":" + columnPrefix
+     */
     private final Map<String, List<String>> unMappedColumnNamesMap = new HashMap<String, List<String>>();
 
     public ResultSetWrapper(ResultSet rs, Configuration configuration) throws SQLException {
         super();
         this.typeHandlerRegistry = configuration.getTypeHandlerRegistry();
         this.resultSet = rs;
+        //获取元数据
         final ResultSetMetaData metaData = rs.getMetaData();
+        //获取列的数量
         final int columnCount = metaData.getColumnCount();
         for (int i = 1; i <= columnCount; i++) {
             columnNames.add(configuration.isUseColumnLabel() ? metaData.getColumnLabel(i) : metaData.getColumnName(i));
@@ -127,11 +151,18 @@ public class ResultSetWrapper {
         return null;
     }
 
+    /**
+     * 根据resultMap 把列名分为映射的和未映射的 主要就是配置了column属性和没有配置column的 记录
+     * @param resultMap
+     * @param columnPrefix
+     * @throws SQLException
+     */
     private void loadMappedAndUnmappedColumnNames(ResultMap resultMap, String columnPrefix) throws SQLException {
         List<String> mappedColumnNames = new ArrayList<String>();
         List<String> unmappedColumnNames = new ArrayList<String>();
         final String upperColumnPrefix = columnPrefix == null ? null : columnPrefix.toUpperCase(Locale.ENGLISH);
         final Set<String> mappedColumns = prependPrefixes(resultMap.getMappedColumns(), upperColumnPrefix);
+        //遍历 然后分开 其中columnNames
         for (String columnName : columnNames) {
             final String upperColumnName = columnName.toUpperCase(Locale.ENGLISH);
             if (mappedColumns.contains(upperColumnName)) {

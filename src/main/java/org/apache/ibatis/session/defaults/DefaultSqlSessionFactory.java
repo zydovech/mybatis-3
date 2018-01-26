@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
+ * 提供了两种创建 SqlSession 对象的方式，分别是 基于当前数据源创建会话 和 基于当前数据库连接创建会话
  * @author Clinton Begin
  */
 public class DefaultSqlSessionFactory implements SqlSessionFactory {

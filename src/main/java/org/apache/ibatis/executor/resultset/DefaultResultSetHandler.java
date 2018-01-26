@@ -376,11 +376,20 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     // GET VALUE FROM ROW FOR SIMPLE RESULT MAP
     //
 
+    /**
+     * 对于无嵌套结果集的处理
+     * @param rsw
+     * @param resultMap
+     * @return 解析结果
+     * @throws SQLException
+     */
     private Object getRowValue(ResultSetWrapper rsw, ResultMap resultMap) throws SQLException {
         final ResultLoaderMap lazyLoader = new ResultLoaderMap();
         Object rowValue = createResultObject(rsw, resultMap, lazyLoader, null);
         if (rowValue != null && !hasTypeHandlerForResultObject(rsw, resultMap.getType())) {
+            //创建的对象不为空且没有对应的类型处理器
             final MetaObject metaObject = configuration.newMetaObject(rowValue);
+
             boolean foundValues = this.useConstructorMappings;
             if (shouldApplyAutomaticMappings(resultMap, false)) {
                 foundValues = applyAutomaticMappings(rsw, resultMap, metaObject, null) || foundValues;
@@ -1236,6 +1245,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return null;
     }
 
+    /**
+     * 查看是否有对应的类型处理器
+     * @param rsw
+     * @param resultType
+     * @return 从typeHandlerRegistry中查看是否有对应的类型处理器 typeHandlerRegistry会在一开始注册很多类型处理器
+     */
     private boolean hasTypeHandlerForResultObject(ResultSetWrapper rsw, Class<?> resultType) {
         if (rsw.getColumnNames().size() == 1) {
             return typeHandlerRegistry.hasTypeHandler(resultType, rsw.getJdbcType(rsw.getColumnNames().get(0)));
